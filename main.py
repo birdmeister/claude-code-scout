@@ -123,11 +123,16 @@ def main():
     logger.info("Stap 3: rapport versturen per e-mail")
     email_cfg = config["email"]
     email_sent = send_report(
-        api_key=email_cfg["resend_api_key"],
+        provider=email_cfg.get("provider", "resend"),
         from_address=email_cfg["from_address"],
         to_address=email_cfg["to_address"],
         subject_prefix=email_cfg["subject_prefix"],
         report_markdown=report,
+        api_key=email_cfg.get("resend_api_key"),
+        smtp_host=email_cfg.get("smtp_host"),
+        smtp_port=email_cfg.get("smtp_port", 587),
+        smtp_user=email_cfg.get("smtp_user"),
+        smtp_password=email_cfg.get("smtp_password"),
     )
 
     if email_sent:
