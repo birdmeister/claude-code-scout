@@ -4,19 +4,16 @@
 # API keys
 gemini:
   api_key: "YOUR_GEMINI_API_KEY"
-  model: "gemini-2.0-flash"  # model met Google Search grounding
+  model: "gemini-3-flash-preview"  # model met Google Search grounding
 
 anthropic:
   api_key: "YOUR_ANTHROPIC_API_KEY"
-  model: "claude-sonnet-4-5-20250929"
+  model: "claude-opus-4-6"
 
-# E-mailinstellingen (SMTP)
+# E-mailinstellingen (Resend)
 email:
-  smtp_host: "smtp.example.com"
-  smtp_port: 587
-  username: "you@example.com"
-  password: "YOUR_SMTP_PASSWORD"
-  from_address: "you@example.com"
+  resend_api_key: "YOUR_RESEND_API_KEY"
+  from_address: "Claude Code Scout <scout@yourdomain.com>"
   to_address: "you@example.com"
   subject_prefix: "[Claude Code Scout]"
 
