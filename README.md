@@ -15,7 +15,7 @@ Gebaseerd op het concept van [Martijn Aslander](https://www.linkedin.com/in/aslf
 
 ```bash
 # Clone de repo
-git clone git@github.com:JOUW_GEBRUIKERSNAAM/claude-code-scout.git
+git clone git@github.com:birdmeister/claude-code-scout.git
 cd claude-code-scout
 
 # Configuratie
@@ -84,9 +84,9 @@ claude-code-scout/
 
 Na het doorlopen van een rapport kun je brongewichten bijwerken door `source_weights.yaml` aan te passen. Bronnen die tot implementaties leiden geef je een hoger gewicht (max 10). Dit kan handmatig, of je bouwt er later een interactieve stap voor.
 
-## E-mail via Hetzner
+## E-mail via Resend
 
-Als je Hetzner gebruikt, kun je SMTP instellen via een externe mailprovider (bijv. Mailgun, Brevo/Sendinblue, of je eigen domein met SMTP). Hetzner blokkeert standaard poort 25 voor uitgaande mail, maar poort 587 (STARTTLS) werkt wel met een externe SMTP-server.
+E-mail wordt verstuurd via de [Resend](https://resend.com) API. Vul je `resend_api_key` in `config.yaml` in en stel een geverifieerd `from_address` in.
 
 ## Later uitbreiden
 
