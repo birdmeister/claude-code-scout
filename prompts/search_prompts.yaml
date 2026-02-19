@@ -1,0 +1,168 @@
+# Zoekprompts voor Claude Code research
+# Elke prompt richt zich op een specifiek aspect van Claude Code.
+# Het systeem stuurt deze via de Gemini API met Google Search grounding.
+
+base_instruction: |
+  You are a research assistant. Your ONLY job is to output structured data
+  in the exact format specified. Only include articles published in the last
+  7 days. Only include substantive articles of 1000+ words — skip shallow
+  listicles and marketing fluff. Output in the format below. If you find
+  nothing relevant, output: GEEN RESULTATEN.
+
+output_format: |
+  TITEL: [article title]
+  AUTEUR: [author name or "Onbekend"]
+  BRON: [website/domain]
+  URL: [full url]
+  DATUM: [publication date or "recent"]
+  INZICHT: [one Dutch sentence summarizing the key takeaway]
+  RELEVANTIE: [score 1-5, where 5 = directly actionable for Claude Code users]
+  ---
+
+prompts:
+  - id: commands
+    name: "Commands & custom slash commands"
+    query: |
+      Search for articles about Claude Code custom commands, slash commands,
+      command design patterns, or command workflows published in the last 7 days.
+
+  - id: hooks
+    name: "Hooks"
+    query: |
+      Search for articles about Claude Code hooks, pre-tool-use hooks,
+      post-tool-use hooks, notification hooks, or event-driven automation
+      in Claude Code published in the last 7 days.
+
+  - id: skills
+    name: "Skills & kennispakketten"
+    query: |
+      Search for articles about Claude Code skills, skill files, SKILL.md,
+      knowledge packages, or reusable instruction sets for Claude Code
+      published in the last 7 days.
+
+  - id: agents
+    name: "Agents & multi-agent workflows"
+    query: |
+      Search for articles about Claude Code agents, subagents, multi-agent
+      orchestration, agentic workflows, or autonomous coding agents
+      published in the last 7 days.
+
+  - id: cost_optimization
+    name: "Kosten & tokenoptimalisatie"
+    query: |
+      Search for articles about Claude Code cost optimization, token
+      reduction, prompt caching, context efficiency, or API cost management
+      published in the last 7 days.
+
+  - id: context_management
+    name: "Contextmanagement"
+    query: |
+      Search for articles about Claude Code context management, context
+      window optimization, /clear usage, /compact strategies, or memory
+      management published in the last 7 days.
+
+  - id: security
+    name: "Beveiliging"
+    query: |
+      Search for articles about Claude Code security, permission management,
+      sandboxing, safe code execution, or security best practices
+      published in the last 7 days.
+
+  - id: claude_md
+    name: "CLAUDE.md best practices"
+    query: |
+      Search for articles about CLAUDE.md configuration, project instructions,
+      Claude Code project setup, or CLAUDE.md best practices published in
+      the last 7 days.
+
+  - id: mcp_servers
+    name: "MCP servers"
+    query: |
+      Search for articles about Claude Code MCP servers, Model Context
+      Protocol, MCP tools, MCP integration, or custom MCP server development
+      published in the last 7 days.
+
+  - id: workflow_design
+    name: "Workflowontwerp"
+    query: |
+      Search for articles about Claude Code workflow design, development
+      workflows, CI/CD integration with Claude Code, or productivity
+      patterns published in the last 7 days.
+
+  - id: error_handling
+    name: "Foutafhandeling & debugging"
+    query: |
+      Search for articles about Claude Code error handling, debugging
+      techniques, troubleshooting, or common pitfalls published in the
+      last 7 days.
+
+  - id: testing
+    name: "Testing & kwaliteitsborging"
+    query: |
+      Search for articles about Claude Code testing strategies, automated
+      testing, test-driven development with AI, or code quality assurance
+      published in the last 7 days.
+
+  - id: git_integration
+    name: "Git-integratie"
+    query: |
+      Search for articles about Claude Code git integration, version control
+      workflows, commit strategies, or git hooks with Claude Code published
+      in the last 7 days.
+
+  - id: multi_file
+    name: "Multi-file editing & refactoring"
+    query: |
+      Search for articles about Claude Code multi-file editing, large
+      codebase refactoring, cross-file changes, or project-wide
+      modifications published in the last 7 days.
+
+  - id: project_init
+    name: "Projectinitialisatie"
+    query: |
+      Search for articles about Claude Code project initialization, project
+      scaffolding, boilerplate generation, or new project setup published
+      in the last 7 days.
+
+  - id: prompt_engineering
+    name: "Prompt engineering voor Claude Code"
+    query: |
+      Search for articles about prompt engineering for Claude Code, effective
+      prompting strategies, instruction design, or getting better results
+      from Claude Code published in the last 7 days.
+
+  - id: persistence
+    name: "Geheugen & persistentie"
+    query: |
+      Search for articles about Claude Code memory, persistence, session
+      management, todo tracking, or maintaining context across sessions
+      published in the last 7 days.
+
+  - id: performance
+    name: "Prestatie-optimalisatie"
+    query: |
+      Search for articles about Claude Code performance, speed optimization,
+      faster responses, parallel execution, or latency reduction published
+      in the last 7 days.
+
+  - id: new_features
+    name: "Nieuwe features & releases"
+    query: |
+      Search for articles about new Claude Code features, recent updates,
+      changelog highlights, or upcoming Claude Code capabilities published
+      in the last 7 days.
+
+  - id: architecture
+    name: "Architectuur & systeemontwerp"
+    query: |
+      Search for articles about Claude Code architecture, system design
+      patterns, scaling AI-assisted development, or structuring large
+      AI-powered projects published in the last 7 days.
+
+  - id: paradigm_challenge
+    name: "Paradigmaverschuivingen & contrair denken"
+    query: |
+      Search for articles that challenge conventional Claude Code practices,
+      propose fundamentally different approaches to AI-assisted coding,
+      or question common assumptions about how Claude Code should be used.
+      Published in the last 7 days.

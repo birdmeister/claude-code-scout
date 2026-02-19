@@ -1,0 +1,8 @@
+config.yaml
+venv/
+__pycache__/
+*.pyc
+reports/
+scout.log
+cron.log
+.env

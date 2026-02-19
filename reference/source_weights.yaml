@@ -1,0 +1,35 @@
+# Gewogen bronnenlijst
+# Bronnen die eerder tot implementaties hebben geleid krijgen hogere scores.
+# Het systeem werkt dit bestand automatisch bij na elke rapportagecyclus.
+
+# Score: 1-10, waar 10 = zeer waardevol gebleken
+# implemented_count: aantal keer dat een bron tot actie heeft geleid
+
+sources:
+  - domain: "docs.anthropic.com"
+    weight: 8
+    implemented_count: 0
+    notes: "Officiële documentatie"
+
+  - domain: "github.com"
+    weight: 7
+    implemented_count: 0
+    notes: "Open source voorbeelden en discussions"
+
+  - domain: "simonwillison.net"
+    weight: 7
+    implemented_count: 0
+    notes: "Diepgaande technische analyses"
+
+  - domain: "medium.com"
+    weight: 4
+    implemented_count: 0
+    notes: "Wisselende kwaliteit, soms goede stukken"
+
+  - domain: "dev.to"
+    weight: 4
+    implemented_count: 0
+    notes: "Community artikelen"
+
+# Nieuwe bronnen worden automatisch toegevoegd met weight: 5
+default_weight: 5

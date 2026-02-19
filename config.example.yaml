@@ -1,0 +1,43 @@
+# Configuratie voor claude-code-scout
+# Kopieer dit bestand naar config.yaml en vul je eigen gegevens in.
+
+# API keys
+gemini:
+  api_key: "YOUR_GEMINI_API_KEY"
+  model: "gemini-2.0-flash"  # model met Google Search grounding
+
+anthropic:
+  api_key: "YOUR_ANTHROPIC_API_KEY"
+  model: "claude-sonnet-4-5-20250929"
+
+# E-mailinstellingen (SMTP)
+email:
+  smtp_host: "smtp.example.com"
+  smtp_port: 587
+  username: "you@example.com"
+  password: "YOUR_SMTP_PASSWORD"
+  from_address: "you@example.com"
+  to_address: "you@example.com"
+  subject_prefix: "[Claude Code Scout]"
+
+# Paden (relatief ten opzichte van project root)
+paths:
+  prompts: "prompts/search_prompts.yaml"
+  system_design: "reference/system_design.md"
+  current_setup: "reference/current_setup.md"
+  source_weights: "reference/source_weights.yaml"
+  reports_dir: "reports"
+
+# Zoekfase-instellingen
+search:
+  # Maximaal aantal resultaten per prompt
+  max_results_per_prompt: 10
+  # Wacht tussen API-calls (seconden) om rate limits te voorkomen
+  delay_between_calls: 5
+
+# Rapportage-instellingen
+report:
+  # Minimale relevantiescore om in het rapport te komen
+  min_relevance_score: 2
+  # Taal van het rapport
+  language: "nl"
