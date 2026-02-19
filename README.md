@@ -11,24 +11,20 @@ Gebaseerd op het concept van [Martijn Aslander](https://www.linkedin.com/in/aslf
 3. **Rapportage** — het Markdown-rapport wordt opgeslagen en per e-mail verstuurd.
 4. **Leereffect** — bronnen die leiden tot implementaties krijgen automatisch meer gewicht in volgende zoekrondes.
 
-## Installatie op je server
+## Installatie (Docker)
 
 ```bash
 # Clone de repo
 git clone git@github.com:JOUW_GEBRUIKERSNAAM/claude-code-scout.git
 cd claude-code-scout
 
-# Python virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Dependencies
-pip install -r requirements.txt
-
 # Configuratie
 cp config.example.yaml config.yaml
-# Vul je API keys en e-mailinstellingen in:
-nano config.yaml
+nano config.yaml  # Vul je API keys en e-mailinstellingen in
+
+# Build en test
+docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.prod.yml run --rm scout
 ```
 
 ## Referentiebestanden invullen
@@ -41,12 +37,10 @@ Er zijn drie bestanden in `reference/` die je moet aanpassen:
 
 Hoe beter je deze bestanden invult, hoe relevanter het rapport wordt.
 
-## Handmatig draaien (testen)
+## Handmatig draaien
 
 ```bash
-cd /pad/naar/claude-code-scout
-source venv/bin/activate
-python main.py
+docker compose -f docker-compose.prod.yml run --rm scout
 ```
 
 Het rapport verschijnt in de `reports/` map en in je inbox.
@@ -60,16 +54,16 @@ crontab -e
 Voeg deze regel toe:
 
 ```cron
-0 21 * * 5 cd /pad/naar/claude-code-scout && /pad/naar/claude-code-scout/venv/bin/python main.py >> /pad/naar/claude-code-scout/cron.log 2>&1
+0 21 * * 5 cd /opt/claude-code-scout && docker compose -f docker-compose.prod.yml run --rm scout >> /opt/claude-code-scout/cron.log 2>&1
 ```
-
-Vervang `/pad/naar/claude-code-scout` door het daadwerkelijke pad op je server.
 
 ## Structuur
 
 ```
 claude-code-scout/
 ├── main.py                    # Hoofdscript (cronjob entry point)
+├── Dockerfile                 # Python 3.12-slim + uv
+├── docker-compose.prod.yml    # Productie compose config
 ├── config.example.yaml        # Voorbeeldconfiguratie
 ├── requirements.txt           # Python dependencies
 ├── prompts/
