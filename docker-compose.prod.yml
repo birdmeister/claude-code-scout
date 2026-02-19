@@ -1,0 +1,13 @@
+services:
+  scout:
+    build: .
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./reports:/app/reports
+    networks:
+      - scout-network
+    restart: "no"
+
+networks:
+  scout-network:
+    driver: bridge
