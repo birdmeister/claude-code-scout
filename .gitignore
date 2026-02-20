@@ -1,8 +1,21 @@
 config.yaml
-venv/
+.env
+
+# Python
 __pycache__/
 *.pyc
-reports/
+.venv/
+venv/
+
+# Testing
+.pytest_cache/
+
+# Logs
 scout.log
 cron.log
-.env
+
+# Output
+reports/
+
+# OS
+.DS_Store
