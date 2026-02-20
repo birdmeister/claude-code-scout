@@ -1,22 +1,21 @@
 """
-Zoekmodule — stuurt prompts naar Gemini met Google Search grounding.
+Zoekmodule — stuurt prompts naar Claude met web search.
 """
 
 import time
 import logging
-from google import genai
-from google.genai import types
+import anthropic
 
 logger = logging.getLogger(__name__)
 
 
-def create_client(api_key: str) -> genai.Client:
-    """Maak een Gemini API client aan."""
-    return genai.Client(api_key=api_key)
+def create_client(api_key: str) -> anthropic.Anthropic:
+    """Maak een Anthropic API client aan."""
+    return anthropic.Anthropic(api_key=api_key)
 
 
 def search_single_prompt(
-    client: genai.Client,
+    client: anthropic.Anthropic,
     model: str,
     base_instruction: str,
     output_format: str,
@@ -26,8 +25,8 @@ def search_single_prompt(
     backoff_multiplier: int = 2,
 ) -> dict:
     """
-    Voer één zoekprompt uit via Gemini met Google Search grounding.
-    Retry met exponential backoff bij rate limits (429).
+    Voer één zoekprompt uit via Claude met web search.
+    Retry met exponential backoff bij rate limits.
 
     Returns een dict met prompt-id, naam en ruwe output.
     """
@@ -39,15 +38,21 @@ def search_single_prompt(
 
     for attempt in range(max_retries + 1):
         try:
-            response = client.models.generate_content(
+            response = client.messages.create(
                 model=model,
-                contents=full_prompt,
-                config=types.GenerateContentConfig(
-                    tools=[types.Tool(google_search=types.GoogleSearch())],
-                    temperature=0.2,
-                ),
+                max_tokens=4096,
+                messages=[{"role": "user", "content": full_prompt}],
+                tools=[{
+                    "type": "web_search_20250305",
+                    "name": "web_search",
+                    "max_uses": 5,
+                }],
             )
-            text = response.text if response.text else "GEEN RESULTATEN"
+            text_parts = [
+                block.text for block in response.content
+                if hasattr(block, "text")
+            ]
+            text = "\n".join(text_parts) if text_parts else "GEEN RESULTATEN"
             logger.info(f"Prompt '{prompt['id']}' afgerond, {len(text)} tekens")
             return {
                 "id": prompt["id"],
@@ -55,7 +60,7 @@ def search_single_prompt(
                 "raw_output": text,
             }
         except Exception as e:
-            is_rate_limit = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
+            is_rate_limit = "429" in str(e) or "rate" in str(e).lower()
             if is_rate_limit and attempt < max_retries:
                 wait = initial_delay * (backoff_multiplier ** attempt)
                 logger.warning(
@@ -73,7 +78,7 @@ def search_single_prompt(
 
 
 def run_all_searches(
-    client: genai.Client,
+    client: anthropic.Anthropic,
     model: str,
     base_instruction: str,
     output_format: str,

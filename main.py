@@ -4,7 +4,7 @@ Claude Code Scout — wekelijkse leermachine.
 
 Dit script wordt via cronjob gestart en doorloopt de volgende stappen:
 1. Laad zoekprompts en referentiebestanden
-2. Stuur prompts naar Gemini met Google Search grounding
+2. Stuur prompts naar Claude met web search
 3. Stuur resultaten + referentiebestanden naar Claude voor analyse
 4. Sla het rapport op en verstuur het per e-mail
 """
@@ -16,8 +16,8 @@ from pathlib import Path
 
 import yaml
 
-from src.search import create_client as create_gemini_client, run_all_searches
-from src.analyze import create_client as create_anthropic_client, analyze_results
+from src.search import create_client, run_all_searches
+from src.analyze import analyze_results
 from src.source_manager import load_source_weights, get_source_weights_text
 from src.email_sender import send_report
 
@@ -80,12 +80,12 @@ def main():
     source_data = load_source_weights(config["paths"]["source_weights"])
     source_weights_text = get_source_weights_text(source_data)
 
-    # Stap 1: zoeken via Gemini
-    logger.info("Stap 1: zoekfase via Gemini")
-    gemini_client = create_gemini_client(config["gemini"]["api_key"])
+    # Stap 1: zoeken via Claude met web search
+    logger.info("Stap 1: zoekfase via Claude")
+    anthropic_client = create_client(config["anthropic"]["api_key"])
     search_results = run_all_searches(
-        client=gemini_client,
-        model=config["gemini"]["model"],
+        client=anthropic_client,
+        model=config["anthropic"].get("search_model", config["anthropic"]["model"]),
         base_instruction=prompts_data["base_instruction"],
         output_format=prompts_data["output_format"],
         prompts=prompts_data["prompts"],
@@ -106,7 +106,6 @@ def main():
 
     # Stap 2: analyse via Claude
     logger.info("Stap 2: analysefase via Claude")
-    anthropic_client = create_anthropic_client(config["anthropic"]["api_key"])
     report = analyze_results(
         client=anthropic_client,
         model=config["anthropic"]["model"],

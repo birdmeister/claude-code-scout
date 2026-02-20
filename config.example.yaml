@@ -2,13 +2,10 @@
 # Kopieer dit bestand naar config.yaml en vul je eigen gegevens in.
 
 # API keys
-gemini:
-  api_key: "YOUR_GEMINI_API_KEY"
-  model: "gemini-3-flash-preview"  # model met Google Search grounding
-
 anthropic:
   api_key: "YOUR_ANTHROPIC_API_KEY"
-  model: "claude-opus-4-6"
+  model: "claude-opus-4-6"            # model voor analyse
+  search_model: "claude-haiku-4-5-20251001"  # model voor zoekfase (goedkoper)
 
 # E-mailinstellingen (Resend)
 email:
