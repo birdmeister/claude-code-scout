@@ -16,6 +16,3 @@ cron.log
 
 # Output
 reports/
-
-# OS
-.DS_Store
