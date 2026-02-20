@@ -9,6 +9,27 @@ import anthropic
 logger = logging.getLogger(__name__)
 
 
+def extract_sources(content_blocks: list) -> dict[str, str]:
+    """
+    Haal geverifieerde URLs uit de API response.
+
+    Extraheert URLs uit web_search_tool_result blokken en uit
+    citations op text blokken. Returns {url: title} dict, gededupliceerd.
+    """
+    sources = {}
+    for block in content_blocks:
+        # URLs uit web search result blokken
+        if getattr(block, "type", None) == "web_search_tool_result":
+            for result in getattr(block, "content", []):
+                if hasattr(result, "url") and hasattr(result, "title"):
+                    sources.setdefault(result.url, result.title)
+        # URLs uit citations op text blokken
+        for citation in getattr(block, "citations", []):
+            if hasattr(citation, "url") and hasattr(citation, "title"):
+                sources.setdefault(citation.url, citation.title)
+    return sources
+
+
 def create_client(api_key: str) -> anthropic.Anthropic:
     """Maak een Anthropic API client aan."""
     return anthropic.Anthropic(api_key=api_key)
@@ -52,7 +73,11 @@ def search_single_prompt(
                 block.text for block in response.content
                 if hasattr(block, "text")
             ]
+            sources = extract_sources(response.content)
             text = "\n".join(text_parts) if text_parts else "GEEN RESULTATEN"
+            if sources:
+                source_lines = [f"- [{t}]({u})" for u, t in sources.items()]
+                text += "\n\nGEVERIFIEERDE BRONNEN:\n" + "\n".join(source_lines)
             logger.info(f"Prompt '{prompt['id']}' afgerond, {len(text)} tekens")
             return {
                 "id": prompt["id"],

@@ -34,7 +34,7 @@ Gebruik per voorstel dit format:
 ### [Categorienaam]
 
 **Voorstel:** [korte beschrijving]
-**Bron:** [auteur, domein, url]
+**Bron:** [auteur, domein, url — gebruik ALLEEN URLs uit de GEVERIFIEERDE BRONNEN sectie]
 **Type:** [klein/fundamenteel]
 **Toelichting:** [waarom dit relevant is voor de gebruiker]
 
@@ -47,6 +47,12 @@ Nieuwe auteurs of domeinen die opvallend goed materiaal leverden.
 
 ## Paradigma-check
 Inzichten die bestaande aannames ter discussie stellen.
+
+BELANGRIJK: Elke zoekresultaat bevat een "GEVERIFIEERDE BRONNEN" sectie met URLs die
+daadwerkelijk bestaan. Gebruik UITSLUITEND deze URLs in het rapport. Genereer NOOIT
+zelf URLs — gebruik alleen wat er letterlijk in de GEVERIFIEERDE BRONNEN staat.
+Als er geen geverifieerde URL beschikbaar is voor een bron, vermeld dan alleen het
+domein zonder URL.
 """
 
 
