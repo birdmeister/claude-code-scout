@@ -21,9 +21,13 @@ def search_single_prompt(
     base_instruction: str,
     output_format: str,
     prompt: dict,
+    max_retries: int = 3,
+    initial_delay: int = 5,
+    backoff_multiplier: int = 2,
 ) -> dict:
     """
     Voer één zoekprompt uit via Gemini met Google Search grounding.
+    Retry met exponential backoff bij rate limits (429).
 
     Returns een dict met prompt-id, naam en ruwe output.
     """
@@ -33,29 +37,39 @@ def search_single_prompt(
 
 {prompt['query']}"""
 
-    try:
-        response = client.models.generate_content(
-            model=model,
-            contents=full_prompt,
-            config=types.GenerateContentConfig(
-                tools=[types.Tool(google_search=types.GoogleSearch())],
-                temperature=0.2,
-            ),
-        )
-        text = response.text if response.text else "GEEN RESULTATEN"
-        logger.info(f"Prompt '{prompt['id']}' afgerond, {len(text)} tekens")
-        return {
-            "id": prompt["id"],
-            "name": prompt["name"],
-            "raw_output": text,
-        }
-    except Exception as e:
-        logger.error(f"Fout bij prompt '{prompt['id']}': {e}")
-        return {
-            "id": prompt["id"],
-            "name": prompt["name"],
-            "raw_output": f"FOUT: {e}",
-        }
+    for attempt in range(max_retries + 1):
+        try:
+            response = client.models.generate_content(
+                model=model,
+                contents=full_prompt,
+                config=types.GenerateContentConfig(
+                    tools=[types.Tool(google_search=types.GoogleSearch())],
+                    temperature=0.2,
+                ),
+            )
+            text = response.text if response.text else "GEEN RESULTATEN"
+            logger.info(f"Prompt '{prompt['id']}' afgerond, {len(text)} tekens")
+            return {
+                "id": prompt["id"],
+                "name": prompt["name"],
+                "raw_output": text,
+            }
+        except Exception as e:
+            is_rate_limit = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
+            if is_rate_limit and attempt < max_retries:
+                wait = initial_delay * (backoff_multiplier ** attempt)
+                logger.warning(
+                    f"Rate limit bij '{prompt['id']}', "
+                    f"retry {attempt + 1}/{max_retries} na {wait}s"
+                )
+                time.sleep(wait)
+                continue
+            logger.error(f"Fout bij prompt '{prompt['id']}': {e}")
+            return {
+                "id": prompt["id"],
+                "name": prompt["name"],
+                "raw_output": f"FOUT: {e}",
+            }
 
 
 def run_all_searches(

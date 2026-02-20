@@ -46,6 +46,37 @@ def test_search_single_prompt_api_error():
 
 
 @patch("src.search.time.sleep")
+def test_search_single_prompt_retries_on_429(mock_sleep):
+    mock_client = MagicMock()
+    mock_client.models.generate_content.side_effect = [
+        RuntimeError("429 RESOURCE_EXHAUSTED"),
+        MagicMock(text="Success after retry"),
+    ]
+
+    result = search_single_prompt(
+        mock_client, "m", "base", "fmt", _make_prompt(),
+        max_retries=3, initial_delay=2, backoff_multiplier=2,
+    )
+    assert result["raw_output"] == "Success after retry"
+    assert mock_client.models.generate_content.call_count == 2
+    mock_sleep.assert_called_once_with(2)
+
+
+@patch("src.search.time.sleep")
+def test_search_single_prompt_gives_up_after_max_retries(mock_sleep):
+    mock_client = MagicMock()
+    mock_client.models.generate_content.side_effect = RuntimeError("429 RESOURCE_EXHAUSTED")
+
+    result = search_single_prompt(
+        mock_client, "m", "base", "fmt", _make_prompt(),
+        max_retries=2, initial_delay=1, backoff_multiplier=2,
+    )
+    assert "FOUT" in result["raw_output"]
+    assert mock_client.models.generate_content.call_count == 3
+    assert mock_sleep.call_count == 2
+
+
+@patch("src.search.time.sleep")
 def test_run_all_searches(mock_sleep):
     mock_client = MagicMock()
     mock_client.models.generate_content.return_value.text = "result"
