@@ -4,6 +4,7 @@ services:
     volumes:
       - ./config.yaml:/app/config.yaml:ro
       - ./reports:/app/reports
+      - ./publications:/app/publications
     networks:
       - scout-network
     restart: "no"
