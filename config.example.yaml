@@ -5,7 +5,7 @@
 anthropic:
   api_key: "YOUR_ANTHROPIC_API_KEY"
   model: "claude-opus-4-6"            # model voor analyse
-  search_model: "claude-haiku-4-5-20251001"  # model voor zoekfase (goedkoper)
+  search_model: "claude-haiku-4-5"  # model voor zoekfase (goedkoper)
 
 # E-mailinstellingen (Resend)
 email:
@@ -21,6 +21,7 @@ paths:
   current_setup: "reference/current_setup.md"
   source_weights: "reference/source_weights.yaml"
   reports_dir: "reports"
+  publications_dir: "publications"  # rapporten die in git worden bijgehouden
 
 # Zoekfase-instellingen
 search:

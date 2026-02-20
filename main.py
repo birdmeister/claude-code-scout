@@ -93,7 +93,9 @@ def main():
     )
 
     results_with_content = [
-        r for r in search_results if "GEEN RESULTATEN" not in r["raw_output"]
+        r for r in search_results
+        if "GEEN RESULTATEN" not in r["raw_output"]
+        and not r["raw_output"].startswith("FOUT:")
     ]
     logger.info(
         f"Zoekfase klaar: {len(results_with_content)}/{len(search_results)} "
@@ -117,6 +119,12 @@ def main():
 
     # Stap 3: rapport opslaan
     report_path = save_report(config["paths"]["reports_dir"], report)
+
+    # Stap 3b: publicatie-kopie opslaan in git repo
+    pub_dir = config["paths"].get("publications_dir")
+    if pub_dir:
+        pub_path = save_report(pub_dir, report)
+        logger.info(f"Publicatie opgeslagen: {pub_path}")
 
     # Stap 4: e-mail versturen
     logger.info("Stap 3: rapport versturen per e-mail")

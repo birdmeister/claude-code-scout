@@ -20,11 +20,11 @@ def extract_sources(content_blocks: list) -> dict[str, str]:
     for block in content_blocks:
         # URLs uit web search result blokken
         if getattr(block, "type", None) == "web_search_tool_result":
-            for result in getattr(block, "content", []):
+            for result in getattr(block, "content", None) or []:
                 if hasattr(result, "url") and hasattr(result, "title"):
                     sources.setdefault(result.url, result.title)
         # URLs uit citations op text blokken
-        for citation in getattr(block, "citations", []):
+        for citation in getattr(block, "citations", None) or []:
             if hasattr(citation, "url") and hasattr(citation, "title"):
                 sources.setdefault(citation.url, citation.title)
     return sources

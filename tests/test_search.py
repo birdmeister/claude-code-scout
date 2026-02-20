@@ -68,6 +68,20 @@ def test_extract_sources_empty():
     assert extract_sources([block]) == {}
 
 
+def test_extract_sources_handles_none_content_and_citations():
+    """Regression: API can return None for content/citations attributes."""
+    search_block = MagicMock()
+    search_block.type = "web_search_tool_result"
+    search_block.content = None
+    del search_block.text
+    search_block.citations = None
+    text_block = MagicMock()
+    text_block.type = "text"
+    text_block.text = "Some text"
+    text_block.citations = None
+    assert extract_sources([search_block, text_block]) == {}
+
+
 # --- search_single_prompt ---
 
 def _make_prompt(id="p1", name="Test", query="search query"):
