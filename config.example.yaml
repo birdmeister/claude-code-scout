@@ -7,12 +7,21 @@ anthropic:
   model: "claude-opus-4-6"            # model voor analyse
   search_model: "claude-haiku-4-5"  # model voor zoekfase (goedkoper)
 
-# E-mailinstellingen (Resend)
+# E-mailinstellingen
 email:
-  resend_api_key: "YOUR_RESEND_API_KEY"
+  provider: "smtp"  # "resend" of "smtp"
   from_address: "Claude Code Scout <scout@yourdomain.com>"
   to_address: "you@example.com"
   subject_prefix: "[Claude Code Scout]"
+
+  # Alleen nodig bij provider = "resend"
+  resend_api_key: "YOUR_RESEND_API_KEY"
+
+  # Alleen nodig bij provider = "smtp" (bijv. Brevo relay)
+  smtp_host: "smtp-relay.brevo.com"
+  smtp_port: 587
+  smtp_user: "YOUR_BREVO_LOGIN"
+  smtp_password: "YOUR_BREVO_SMTP_KEY"
 
 # Paden (relatief ten opzichte van project root)
 paths:
